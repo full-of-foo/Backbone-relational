@@ -1498,7 +1498,14 @@
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 
 				// Check if we're not setting a duplicate id before actually calling `set`.
-				Backbone.Relational.store.checkId( this, newId );
+				try {
+					Backbone.Relational.store.checkId( this, newId );
+				}
+				catch (e) {
+					console.log(e);
+					Backbone.Relational.store.reset();
+					Backbone.Relational.store.checkId( this, newId );
+				}
 
 				var result = Backbone.Model.prototype.set.apply( this, arguments );
 
